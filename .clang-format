@@ -17,7 +17,8 @@ AllowShortCaseLabelsOnASingleLine: true
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLambdasOnASingleLine: All
 ContinuationIndentWidth: 2
-AlignOperands: AlignAfterOperator
-AlignAfterOpenBracket: BlockIndent
+AlignOperands: DontAlign
+AlignAfterOpenBracket: DontAlign
 RequiresClausePosition: OwnLine
 #RequiresExpressionIndentation: OuterScope
+LambdaBodyIndentation: OuterScope

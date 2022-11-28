@@ -4,7 +4,7 @@ project(adventofcode)
 set(CMAKE_CXX_STANDARD 23)
 
 set(AOC_YEAR 2021)
-set(AOC_DAY 24)
+set(AOC_DAY 4)
 
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")

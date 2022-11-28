@@ -56,7 +56,7 @@ void vm_advance(vm_state_type& vm, instruction_type<OpCode::INP> ins, char input
 
 template<typename BinaryOp> void vm_arith(vm_state_type& vm, IArgs args, BinaryOp&& op = BinaryOp()) {
     i64& target = vm.first[register_index(args.a)];
-    target = std::invoke(std::forward<BinaryOp>(op), auto { target }, register_or_value(vm, args.b));
+    target = std::invoke(std::forward<BinaryOp>(op), target, register_or_value(vm, args.b));
 }
 
 void vm_advance(vm_state_type& vm, instruction_type<OpCode::ADD> ins, char) { vm_arith(vm, ins.second, std::plus {}); }
