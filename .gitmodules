@@ -1,0 +1,6 @@
+[submodule "Thirdparty/LibStuff"]
+	path = Thirdparty/LibStuff
+	url = git@github.com:xor-shift/LibStuff.git
+[submodule "Thirdparty/range-v3"]
+	path = Thirdparty/range-v3
+	url = https://github.com/ericniebler/range-v3
