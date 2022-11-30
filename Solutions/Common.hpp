@@ -25,6 +25,7 @@
 #include <range/v3/view/chunk_by.hpp>
 #include <range/v3/view/common.hpp>
 #include <range/v3/view/drop.hpp>
+#include <range/v3/view/drop_while.hpp>
 #include <range/v3/view/empty.hpp>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/for_each.hpp>
@@ -32,6 +33,7 @@
 #include <range/v3/view/split.hpp>
 #include <range/v3/view/take.hpp>
 #include <range/v3/view/transform.hpp>
+#include <range/v3/view/zip.hpp>
 
 #include <fmt/format.h>
 
@@ -84,7 +86,6 @@ using u128 = __uint128_t;
 using usize = size_t;
 
 template<typename T> using span = std::span<T>;
-
 template<typename... Ts> using umap = std::unordered_map<Ts...>;
 template<typename... Ts> using uset = std::unordered_set<Ts...>;
 template<typename... Ts> using pair = std::pair<Ts...>;
@@ -145,6 +146,7 @@ namespace views = ranges::views;
 using views::chunk;
 using views::chunk_by;
 using views::drop;
+using views::drop_while;
 using views::empty;
 using views::filter;
 using views::for_each;
@@ -152,6 +154,8 @@ using views::sliding;
 using views::split;
 using views::take;
 using views::transform;
+using views::zip;
+using ranges::distance;
 
 inline static constexpr auto fwd_to_str = views::transform([](auto svd) {
     auto v = svd | views::common;
@@ -166,16 +170,6 @@ constexpr std::vector<T> vec_from_view(auto view) {
         ret.emplace_back(std::move(v));
     return ret;
 }
-
-template<typename T>
-inline static constexpr auto fwd_to_vec = views::transform([](auto r) {
-    std::vector<T> ret {};
-    auto vr = r | views::common;
-    ret.reserve(ranges::distance(vr));
-    for (T v : r)
-        ret.emplace_back(std::move(v));
-    return ret;
-});
 
 template<typename T>
 inline static constexpr auto str_to_t = views::transform([](auto sv) {

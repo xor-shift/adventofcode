@@ -5,27 +5,30 @@ namespace AoC {
 Solution::Solution() { }
 
 void Solution::solution(size_t part, std::string_view input) {
-    auto a = input | split("\n"sv) //
-      | drop(1)                    //
-      | fwd_to_str                 //
-      | chunk(6)                   //
-      | transform([](auto c) {
-            auto a = c  //
-              | drop(1) //
+    vec<i32> draws = vec_from_view<vec<i32>>(input | split("\n"sv) | fwd_to_str | transform([](auto line) {
+        return vec_from_view<i32>(line | split(',') | fwd_to_str | str_to_t<i32>);
+    }) | take(1))[0];
+
+    auto a = input    //
+      | split("\n"sv) //
+      | drop(1)       //
+      | fwd_to_str    //
+      | chunk(6)      //
+      | transform([](auto chnk) {
+            auto a = chnk //
+              | drop(1)   //
               | transform([](auto line) {
-                    auto a = line    //
-                      | split(" "sv) //
-                      | filter([](auto v) { return ranges::distance(v.begin(), v.end()) != 0; }) | fwd_to_str
+                    auto a = line                                       //
+                      | split(" "sv)                                    //
+                      | filter([](auto v) { return distance(v) != 0; }) //
+                      | fwd_to_str                                      //
                       | str_to_t<i32>;
-                    return vec<i32>(a.begin(), a.end());
+                    return vec_from_view<i32>(a);
                 });
             return vec_from_view<vec<i32>>(a);
         });
 
     vec<vec<vec<i32>>> boards = vec_from_view<vec<vec<i32>>>(a);
-
-    std::string b = *(input | split("\n"sv) | take(1) | fwd_to_str).begin();
-    vec<i32> draws = vec_from_view<i32>(b | split(',') | fwd_to_str | str_to_t<i32>);
 
     auto check_win = [](vec<vec<i32>>& board) {
         for (auto& row : board) {
