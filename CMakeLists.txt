@@ -3,8 +3,8 @@ project(adventofcode)
 
 set(CMAKE_CXX_STANDARD 23)
 
-set(AOC_YEAR 2017)
-set(AOC_DAY 13)
+set(AOC_YEAR 2022)
+set(AOC_DAY 1)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
