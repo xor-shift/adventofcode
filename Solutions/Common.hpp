@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <charconv>
+#include <concepts>
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
@@ -29,6 +30,7 @@
 #include <range/v3/view/empty.hpp>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/for_each.hpp>
+#include <range/v3/view/reverse.hpp>
 #include <range/v3/view/sliding.hpp>
 #include <range/v3/view/split.hpp>
 #include <range/v3/view/take.hpp>
@@ -150,6 +152,7 @@ using views::drop_while;
 using views::empty;
 using views::filter;
 using views::for_each;
+using views::reverse;
 using views::sliding;
 using views::split;
 using views::take;
@@ -160,6 +163,17 @@ using ranges::distance;
 inline static constexpr auto fwd_to_str = views::transform([](auto svd) {
     auto v = svd | views::common;
     return std::string(v.begin(), v.end());
+});
+
+inline static constexpr auto fwd_to_strv = views::transform([](auto svd) {
+    auto begin = svd.begin();
+    auto end = svd.begin();
+    for (auto t = end; t != svd.end(); t++) {
+        end = t;
+    }
+    char const& begin_c = *svd.begin();
+    char const& end_c = *end;
+    return std::string_view(&begin_c, &end_c - &begin_c + 1);
 });
 
 template<typename T>
@@ -177,5 +191,18 @@ inline static constexpr auto str_to_t = views::transform([](auto sv) {
     std::from_chars(sv.data(), sv.data() + sv.size(), v);
     return v;
 });
+
+template<typename T, typename BinaryOp, typename View>
+constexpr auto fold_view(View&& v, T init, BinaryOp&& binary_op) {
+    for (T x : v)
+        init = std::invoke(std::forward<BinaryOp>(binary_op), init, x);
+
+    return init;
+}
+
+template<typename T, typename View>
+constexpr auto fold_view(View&& v, T init = 0) {
+    return fold_view(v, init, std::plus<T>{});
+}
 
 }

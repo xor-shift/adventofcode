@@ -4,7 +4,7 @@ namespace AoC {
 
 Solution::Solution() { }
 
-void Solution::solution(size_t part, std::string_view input) {
+static void unwashed(size_t part, std::string_view input) {
     /*auto ni = input | split("\n"sv) | transform([](auto v) { //
         return v | drop_while([](auto c) { return c == '+'; });
     }) | fwd_to_str;
@@ -51,6 +51,14 @@ void Solution::solution(size_t part, std::string_view input) {
         auto c = *(--it);
         fmt::print("{}\n", a + b + c);
     }
+}
+
+void Solution::solution(size_t part, std::string_view input) {
+    auto groups = vec_from_view<i64>(input | split("\n\n"sv) | transform([](auto block) { //
+        return fold_view<i64>(block | split("\n"sv) | fwd_to_strv | str_to_t<i64>);
+    }));
+    sort(begin(groups), end(groups));
+    fmt::print("{}\n", fold_view<i64>(groups | reverse | take(part == 1 ? 1 : 3)));
 }
 
 void Solution::solve_example(size_t part) {
