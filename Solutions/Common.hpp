@@ -19,6 +19,7 @@
 #include <span>
 #include <unordered_map>
 #include <unordered_set>
+#include <set>
 #include <vector>
 
 #include <range/v3/range/operations.hpp>
@@ -90,6 +91,7 @@ using usize = size_t;
 template<typename T> using span = std::span<T>;
 template<typename... Ts> using umap = std::unordered_map<Ts...>;
 template<typename... Ts> using uset = std::unordered_set<Ts...>;
+template<typename... Ts> using set = std::set<Ts...>;
 template<typename... Ts> using pair = std::pair<Ts...>;
 template<typename... Ts> using tuple = std::tuple<Ts...>;
 template<typename T> using umarr = umap<isize, T>;
