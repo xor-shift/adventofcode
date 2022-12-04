@@ -207,4 +207,12 @@ constexpr auto fold_view(View&& v, T init = 0) {
     return fold_view(v, init, std::plus<T>{});
 }
 
+template<typename T, typename U, typename View>
+constexpr pair<T, U> view_to_pair(View&& view) {
+    auto it = view.begin();
+    T a = *it++;
+    U b = *it;
+    return std::make_pair(a, b);
+}
+
 }
