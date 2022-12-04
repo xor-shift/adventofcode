@@ -52,25 +52,23 @@ void unwashed(size_t part, std::string_view input) {
 }
 
 void Solution::solution(size_t part, std::string_view input) {
-    auto v = input | split("\n"sv) | fwd_to_strv | transform([](auto v) {                                           //
-        return view_to_pair<pair<i64, i64>, pair<i64, i64>>(v | split(","sv) | fwd_to_strv | transform([](auto r) { //
-            return view_to_pair<i64, i64>(r | split("-"sv) | fwd_to_strv | str_to_t<i64>);
-        }));
-    }) | transform([part](auto p) {
-        auto [a, b] = p;
-        auto ok = false;
+    auto a = input | split("\n"sv) | fwd_to_str | transform([part](auto s) {
+        long in[4];
+        std::sscanf(s.c_str(), "%ld-%ld,%ld-%ld", in + 0, in + 1, in + 2, in + 3);
+
+        bool ok = false;
 
         if (part == 1) {
-            ok |= !(a.first > b.first) && !(a.second < b.second);
-            ok |= !(b.first > a.first) && !(b.second < a.second);
+            ok |= !(in[0] > in[2]) && !(in[1] < in[3]);
+            ok |= !(in[2] > in[0]) && !(in[3] < in[1]);
         } else {
-            ok = !(b.first > a.second || a.first > b.second);
+            ok = !(in[2] > in[1] || in[0] > in[3]);
         }
 
         return static_cast<i64>(ok);
     });
 
-    fmt::print("{}\n", fold_view<i64>(v));
+    fmt::print("{}\n", fold_view<i64>(a));
 }
 
 void Solution::solve_example(size_t part) {
