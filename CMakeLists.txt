@@ -4,10 +4,10 @@ project(adventofcode)
 set(CMAKE_CXX_STANDARD 23)
 
 set(AOC_YEAR 2022)
-set(AOC_DAY 6)
-set(AOC_DO_BIGBOY ON)
+set(AOC_DAY 7)
+set(AOC_DO_BIGBOY FF)
 set(AOC_SINGLE_PART ${AOC_DO_BIGBOY})
-set(AOC_DO_EXAMPLES OFF)
+set(AOC_DO_EXAMPLES ON)
 
 if (${AOC_DO_BIGBOY})
     set(AOC_INFILE ./Solutions/${AOC_YEAR}/${AOC_DAY}/bigboy)
