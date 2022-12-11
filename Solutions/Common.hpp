@@ -16,10 +16,10 @@
 #include <iostream>
 #include <numeric>
 #include <optional>
+#include <set>
 #include <span>
 #include <unordered_map>
 #include <unordered_set>
-#include <set>
 #include <vector>
 
 #include <range/v3/range/operations.hpp>
@@ -132,9 +132,8 @@ template<typename T, typename Fn>
 constexpr auto windowed_foreach(size_t window_size, std::span<T> vals, Fn&& fn) {
     using Ret = std::invoke_result_t<Fn, std::span<T>>;
     std::vector<Ret> vec {};
-    windowed_foreach(window_size, vals, [&](auto v) {
-        vec.template emplace_back(std::forward<Ret>(std::invoke(std::forward<Fn>(fn), v)));
-    });
+    windowed_foreach(window_size, vals,
+      [&](auto v) { vec.template emplace_back(std::forward<Ret>(std::invoke(std::forward<Fn>(fn), v))); });
     return vec;
 }
 
@@ -147,6 +146,7 @@ template<typename T, typename Fn> constexpr auto windowed_foreach(size_t window_
 using namespace Aliases;
 using namespace std::string_view_literals;
 namespace views = ranges::views;
+using ranges::distance;
 using views::chunk;
 using views::chunk_by;
 using views::drop;
@@ -160,7 +160,6 @@ using views::split;
 using views::take;
 using views::transform;
 using views::zip;
-using ranges::distance;
 
 inline static constexpr auto fwd_to_str = views::transform([](auto svd) {
     auto v = svd | views::common;
@@ -178,8 +177,7 @@ inline static constexpr auto fwd_to_strv = views::transform([](auto svd) {
     return std::string_view(&begin_c, &end_c - &begin_c + 1);
 });
 
-template<typename T>
-constexpr std::vector<T> vec_from_view(auto view) {
+template<typename T> constexpr std::vector<T> vec_from_view(auto view) {
     std::vector<T> ret {};
     ret.reserve(ranges::distance(view));
     for (T v : view)
@@ -202,17 +200,45 @@ constexpr auto fold_view(View&& v, T init, BinaryOp&& binary_op) {
     return init;
 }
 
-template<typename T, typename View>
-constexpr auto fold_view(View&& v, T init = 0) {
-    return fold_view(v, init, std::plus<T>{});
+template<typename T, typename View> constexpr auto fold_view(View&& v, T init = 0) {
+    return fold_view(v, init, std::plus<T> {});
 }
 
-template<typename T, typename U, typename View>
-constexpr pair<T, U> view_to_pair(View&& view) {
+template<typename T, typename U, typename View> constexpr pair<T, U> view_to_pair(View&& view) {
     auto it = view.begin();
     T a = *it++;
     U b = *it;
     return std::make_pair(a, b);
+}
+
+template<typename T, typename View> constexpr std::expected<T, std::errc> from_chars(View&& view) {
+    T v;
+    std::from_chars_result ret = std::from_chars(begin(view), end(view), v);
+
+    if (ret.ec != std::errc()) {
+        return std::unexpected { ret.ec };
+    }
+
+    return v;
+}
+
+// O(M*N)
+// give a >= comparator to "comp" to find n smallest
+template<typename T, size_t M, typename View, typename Comp = std::less<T>>
+    requires std::is_arithmetic_v<T>
+constexpr std::array<T, M> find_n_largest(View&& view, Comp&& comp = Comp()) {
+    std::array<T, M> ret;
+    std::fill(begin(ret), end(ret), std::numeric_limits<T>::min());
+
+    for (auto v : view) {
+        auto it = std::lower_bound(begin(ret), end(ret), v);
+        if (it == begin(ret))
+            continue;
+
+        *std::prev(it) = v;
+    }
+
+    return ret;
 }
 
 }

@@ -9,7 +9,7 @@ namespace AoC {
 struct Solution {
     Solution();
 
-    void solve(bool example, size_t part, std::string_view input = "");
+    std::string solve(size_t part, std::string_view input);
 };
 
 }
