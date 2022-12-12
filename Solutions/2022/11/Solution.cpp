@@ -39,14 +39,16 @@ std::string Solution::solve(size_t part, std::string_view input) {
     }));
 
     i64 lcm = 1;
-    for (auto const& monkey : monkeys) {
-        // lcm = std::lcm(monkey.test_arg, lcm);
-        lcm = lcm * monkey.test_arg;
+    if (part == 2) {
+        for (auto const& monkey : monkeys) {
+            // lcm = std::lcm(monkey.test_arg, lcm);
+            lcm = lcm * monkey.test_arg;
+        }
     }
 
     for (size_t round = 0; round < (part == 1 ? 20 : 10000); round++) {
         for (auto& monkey : monkeys) {
-            auto throws = monkey.items | transform([&](auto item) {
+            auto throws = monkey.items | transform([&, &monkey = const_cast<Monkey<i64> const&>(monkey)](auto item) {
                 auto res = item;
                 i64 arg;
                 arg = monkey.oper_arg_str == "old" ? item : monkey.oper_arg;
@@ -59,7 +61,8 @@ std::string Solution::solve(size_t part, std::string_view input) {
 
                 if (part == 1)
                     res /= 3;
-                res %= lcm;
+                else
+                    res %= lcm;
 
                 auto to = (&monkey.true_val)[res % monkey.test_arg != 0];
                 return std::make_pair(to, res);
