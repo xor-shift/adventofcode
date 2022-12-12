@@ -4,13 +4,12 @@ namespace AoC {
 
 Solution::Solution() { }
 
-void Solution::solve(bool example, size_t part, std::string_view input) {
-    if (example)
-        input = ""sv;
-
+std::string Solution::solve(size_t part, std::string_view input) {
     if (part == 1) {
     } else if (part == 2) {
     }
+
+    return "";
 }
 
 }

@@ -213,7 +213,7 @@ template<typename T, typename U, typename View> constexpr pair<T, U> view_to_pai
 
 template<typename T, typename View> constexpr std::expected<T, std::errc> from_chars(View&& view) {
     T v;
-    std::from_chars_result ret = std::from_chars(begin(view), end(view), v);
+    auto ret = std::from_chars(begin(view), end(view), v);
 
     if (ret.ec != std::errc()) {
         return std::unexpected { ret.ec };
@@ -222,8 +222,6 @@ template<typename T, typename View> constexpr std::expected<T, std::errc> from_c
     return v;
 }
 
-// O(M*N)
-// give a >= comparator to "comp" to find n smallest
 template<typename T, size_t M, typename View, typename Comp = std::less<T>>
     requires std::is_arithmetic_v<T>
 constexpr std::array<T, M> find_n_largest(View&& view, Comp&& comp = Comp()) {
@@ -231,7 +229,7 @@ constexpr std::array<T, M> find_n_largest(View&& view, Comp&& comp = Comp()) {
     std::fill(begin(ret), end(ret), std::numeric_limits<T>::min());
 
     for (auto v : view) {
-        auto it = std::lower_bound(begin(ret), end(ret), v);
+        auto it = std::lower_bound(begin(ret), end(ret), v, comp);
         if (it == begin(ret))
             continue;
 
