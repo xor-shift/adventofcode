@@ -132,7 +132,7 @@ std::string Solution::solve(size_t part, std::string_view input) {
     //fmt::print("{}\n", try_place_sand(solids));
 
     if (part == 2) {
-        draw_line(solids, {-1000, height + 2}, {1000, height + 2});
+        draw_line(solids, {500 - height - 2, height + 2}, {500 + height + 2, height + 2});
     }
 
     i64 s = 0;
