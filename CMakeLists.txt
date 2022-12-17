@@ -4,7 +4,7 @@ project(adventofcode)
 set(CMAKE_CXX_STANDARD 23)
 
 set(AOC_YEAR 2022)
-set(AOC_DAY 17)
+set(AOC_DAY 16)
 set(AOC_DO_BIGBOY OFF)
 set(AOC_SINGLE_PART ${AOC_DO_BIGBOY})
 set(AOC_DO_EXAMPLES ON)
