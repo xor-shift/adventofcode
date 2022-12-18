@@ -8,16 +8,14 @@ inline void run_for_file(bool single_part, const char* filename) {
     const Stf::MMapStringView file(filename, true);
     auto sv = static_cast<std::string_view>(file);
 
-    fmt::print("Running for file \"{}\":\n", filename);
+    fmt::print("Running for file \"{}\":", filename);
     if (single_part) {
-        solution.solve(1, sv);
+        fmt::print(" {}\n", solution.solve(1, sv));
         return;
     }
 
-    fmt::print("Pt. 1:\n");
-    solution.solve(1, sv);
-    fmt::print("Pt. 2:\n");
-    solution.solve(2, sv);
+    fmt::print("\nPt. 1: {}\n", solution.solve(1, sv));
+    fmt::print("Pt. 2: {}\n", solution.solve(2, sv));
 }
 
 int main() {

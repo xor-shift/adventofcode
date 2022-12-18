@@ -211,6 +211,14 @@ template<typename T, typename U, typename View> constexpr pair<T, U> view_to_pai
     return std::make_pair(a, b);
 }
 
+template<typename T, size_t N, typename View> constexpr arr<T, N> view_to_arr(View&& view) {
+    arr<T, N> ret;
+    auto it = view.begin();
+    for (usize i = 0; i < N; i++)
+        ret[i] = *it++;
+    return ret;
+}
+
 template<typename T, typename View> constexpr std::expected<T, std::errc> from_chars(View&& view) {
     T v;
     auto ret = std::from_chars(begin(view), end(view), v);
